@@ -14,6 +14,7 @@ Cuando una tarea sea larga, ambigua o de alto impacto, el asistente debe pregunt
 - Comandos `/assistant` y `/asistente`.
 - Header personalizado en la TUI.
 - Status line con el perfil activo.
+- Tema `assistant-noir` con paleta oscura elegante para la TUI.
 - Herramienta `ask_user` para hacer preguntas estructuradas al usuario.
 - Preguntas de selección única y selección múltiple.
 - Opción final para que el usuario escriba una respuesta personalizada.
@@ -69,6 +70,8 @@ Desde esta carpeta:
 ```bash
 pi --extension ./extensions/assistant.ts
 ```
+
+Para probar también el tema incluido, instala/carga el paquete local y selecciona `assistant-noir` desde `/settings`.
 
 ## Instalación global manual
 

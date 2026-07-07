@@ -4,7 +4,7 @@ import { createCommandHandler } from "./commands.ts";
 import { config } from "./config.ts";
 import { assistantInstructions } from "./profile.ts";
 import { playSound } from "./sound.ts";
-import { renderHeader, updateStatus } from "./ui.ts";
+import { renderHeader, updateStatus, updateWorkingIndicator } from "./ui.ts";
 
 export default function assistantExtension(pi: ExtensionAPI) {
 	registerAskUserTool(pi, () => playSound("attention", config.sound));
@@ -14,13 +14,17 @@ export default function assistantExtension(pi: ExtensionAPI) {
 		if (ctx.mode === "tui" && config.ui) {
 			ctx.ui.setHeader((_tui, theme) => renderHeader(config, theme));
 			updateStatus(ctx, config);
+			updateWorkingIndicator(ctx, config);
 		}
 	});
 	pi.on("before_agent_start", async (event) => {
 		if (!config.enabled) return undefined;
 		return { systemPrompt: event.systemPrompt + assistantInstructions() };
 	});
-	pi.on("agent_start", async (_event, ctx) => updateStatus(ctx, config));
+	pi.on("agent_start", async (_event, ctx) => {
+		updateStatus(ctx, config);
+		updateWorkingIndicator(ctx, config);
+	});
 	pi.on("agent_end", async (_event, ctx) => {
 		updateStatus(ctx, config);
 		playSound("done", config.sound);

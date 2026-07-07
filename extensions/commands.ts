@@ -1,7 +1,7 @@
 import type { Theme } from "@earendil-works/pi-coding-agent";
 import type { AssistantConfig } from "./types.ts";
 import { ASSISTANT_LABEL } from "./profile.ts";
-import { helpText, renderHeader, updateStatus } from "./ui.ts";
+import { helpText, renderHeader, updateStatus, updateWorkingIndicator } from "./ui.ts";
 
 export function createCommandHandler(command: string, config: AssistantConfig) {
 	return async (args: string, ctx: any) => {
@@ -27,6 +27,7 @@ export function createCommandHandler(command: string, config: AssistantConfig) {
 			if (ctx.mode === "tui" && !config.ui) {
 				ctx.ui.setHeader(undefined);
 				ctx.ui.setStatus("pi-assistant", "");
+				updateWorkingIndicator(ctx, config);
 			}
 		} else {
 			ctx.ui.notify(helpText(command), "warning");
@@ -34,6 +35,7 @@ export function createCommandHandler(command: string, config: AssistantConfig) {
 		}
 		if (ctx.mode === "tui" && config.ui) ctx.ui.setHeader((_tui: unknown, theme: Theme) => renderHeader(config, theme));
 		updateStatus(ctx, config);
+		updateWorkingIndicator(ctx, config);
 		ctx.ui.notify(`Assistant: ${config.enabled ? "ON" : "OFF"} · ${ASSISTANT_LABEL}`, "info");
 	};
 }
