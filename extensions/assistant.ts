@@ -4,7 +4,7 @@ import { createCommandHandler } from "./commands.ts";
 import { config } from "./config.ts";
 import { assistantInstructions } from "./profile.ts";
 import { playSound } from "./sound.ts";
-import { renderHeader, updateStatus, updateWorkingIndicator } from "./ui.ts";
+import { renderHeader, updateAssistantWidget, updateStatus, updateWorkingIndicator } from "./ui.ts";
 
 export default function assistantExtension(pi: ExtensionAPI) {
 	registerAskUserTool(pi, () => playSound("attention", config.sound));
@@ -12,8 +12,9 @@ export default function assistantExtension(pi: ExtensionAPI) {
 	pi.registerCommand("asistente", { description: "Alias en español de /assistant", handler: createCommandHandler("/asistente", config) });
 	pi.on("session_start", async (_event, ctx) => {
 		if (ctx.mode === "tui" && config.ui) {
-			ctx.ui.setHeader((_tui, theme) => renderHeader(config, theme));
+			ctx.ui.setHeader((tui, theme) => renderHeader(config, theme, tui));
 			updateStatus(ctx, config);
+			updateAssistantWidget(ctx, config);
 			updateWorkingIndicator(ctx, config);
 		}
 	});
@@ -22,11 +23,19 @@ export default function assistantExtension(pi: ExtensionAPI) {
 		return { systemPrompt: event.systemPrompt + assistantInstructions() };
 	});
 	pi.on("agent_start", async (_event, ctx) => {
-		updateStatus(ctx, config);
+		updateStatus(ctx, config, "working");
+		updateAssistantWidget(ctx, config);
 		updateWorkingIndicator(ctx, config);
 	});
 	pi.on("agent_end", async (_event, ctx) => {
-		updateStatus(ctx, config);
+		updateStatus(ctx, config, "done");
+		updateAssistantWidget(ctx, config);
 		playSound("done", config.sound);
+	});
+	pi.on("session_shutdown", async (_event, ctx) => {
+		if (ctx.mode !== "tui") return;
+		ctx.ui.setWidget?.("pi-assistant", undefined);
+		ctx.ui.setStatus("pi-assistant", undefined);
+		ctx.ui.setWorkingIndicator?.();
 	});
 }

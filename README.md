@@ -12,8 +12,10 @@ Cuando una tarea sea larga, ambigua o de alto impacto, el asistente debe pregunt
 
 - Identidad global inyectada en el `systemPrompt` mediante `before_agent_start`.
 - Comandos `/assistant` y `/asistente`.
-- Header personalizado en la TUI.
-- Status line con el perfil activo.
+- Header personalizado y animado en la TUI.
+- Status line con estados de actividad del asistente.
+- Widget compacto bajo el editor con perfil, modelo y accesos rápidos.
+- Spinner/working indicator personalizado con animación suave.
 - Tema `assistant-noir` con paleta oscura elegante para la TUI.
 - Herramienta `ask_user` para hacer preguntas estructuradas al usuario.
 - Preguntas de selección única y selección múltiple.

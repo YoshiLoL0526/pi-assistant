@@ -2,7 +2,7 @@ import type { Theme } from "@earendil-works/pi-coding-agent";
 import { Key, matchesKey, truncateToWidth } from "@earendil-works/pi-tui";
 import type { AssistantConfig } from "./types.ts";
 import { ASSISTANT_LABEL } from "./profile.ts";
-import { helpText, renderHeader, updateStatus, updateWorkingIndicator } from "./ui.ts";
+import { helpText, renderHeader, updateAssistantWidget, updateStatus, updateWorkingIndicator } from "./ui.ts";
 
 type SettingId = "enabled" | "sound" | "ui" | "status" | "help" | "close";
 
@@ -30,12 +30,13 @@ function valueFor(item: SettingItem, config: AssistantConfig): string {
 
 function applyUi(ctx: any, config: AssistantConfig): void {
 	if (ctx.mode !== "tui") return;
-	if (config.ui) ctx.ui.setHeader((_tui: unknown, theme: Theme) => renderHeader(config, theme));
+	if (config.ui) ctx.ui.setHeader((tui: any, theme: Theme) => renderHeader(config, theme, tui));
 	else {
 		ctx.ui.setHeader(undefined);
-		ctx.ui.setStatus("pi-assistant", "");
+		ctx.ui.setStatus("pi-assistant", undefined);
 	}
 	updateStatus(ctx, config);
+	updateAssistantWidget(ctx, config);
 	updateWorkingIndicator(ctx, config);
 }
 
