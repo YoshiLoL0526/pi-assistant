@@ -1,6 +1,7 @@
 import type { Theme } from "@earendil-works/pi-coding-agent";
 import { Key, matchesKey, truncateToWidth } from "@earendil-works/pi-tui";
 import type { AssistantConfig } from "./types.ts";
+import { saveConfig } from "./config.ts";
 import { ASSISTANT_LABEL } from "./profile.ts";
 import { helpText, renderHeader, updateAssistantWidget, updateStatus, updateWorkingIndicator } from "./ui.ts";
 
@@ -74,6 +75,8 @@ export async function openSettingsPanel(ctx: any, command: string, config: Assis
 				done();
 				return;
 			}
+			const saved = saveConfig(config);
+			if (!saved) ctx.ui.notify("No se pudo guardar la configuración de Pi Assistant", "warning");
 			applyUi(ctx, config);
 			refresh();
 		}

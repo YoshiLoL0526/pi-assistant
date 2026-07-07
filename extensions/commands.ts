@@ -1,4 +1,5 @@
 import type { AssistantConfig, UiStyle } from "./types.ts";
+import { configPath, saveConfig } from "./config.ts";
 import { ASSISTANT_LABEL } from "./profile.ts";
 import { openSettingsPanel } from "./settings-ui.ts";
 import { helpText, renderHeader, updateAssistantWidget, updateStatus, updateWorkingIndicator } from "./ui.ts";
@@ -16,6 +17,10 @@ export function createCommandHandler(command: string, config: AssistantConfig) {
 		}
 		if (arg === "help" || arg === "ayuda") {
 			ctx.ui.notify(helpText(command), "info");
+			return;
+		}
+		if (arg === "config-path") {
+			ctx.ui.notify(`Config: ${configPath()}`, "info");
 			return;
 		}
 		if (arg === "settings" || arg === "config" || arg === "panel") {
@@ -44,10 +49,11 @@ export function createCommandHandler(command: string, config: AssistantConfig) {
 			ctx.ui.notify(helpText(command), "warning");
 			return;
 		}
+		const saved = saveConfig(config);
 		if (ctx.mode === "tui" && config.ui) ctx.ui.setHeader(config.uiStyle === "quiet" ? undefined : (tui: any, theme: any) => renderHeader(config, theme, tui));
 		updateStatus(ctx, config);
 		updateAssistantWidget(ctx, config);
 		updateWorkingIndicator(ctx, config);
-		ctx.ui.notify(`Assistant: ${config.enabled ? "ON" : "OFF"} · ${ASSISTANT_LABEL} · estilo ${config.uiStyle}`, "info");
+		ctx.ui.notify(`Assistant: ${config.enabled ? "ON" : "OFF"} · ${ASSISTANT_LABEL} · estilo ${config.uiStyle}${saved ? "" : " · no se pudo guardar config"}`, saved ? "info" : "warning");
 	};
 }
