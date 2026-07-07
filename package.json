@@ -6,6 +6,6 @@
   "license": "MIT",
   "type": "module",
   "pi": {
-    "extensions": ["./extensions"]
+    "extensions": ["./extensions/assistant.ts"]
   }
 }

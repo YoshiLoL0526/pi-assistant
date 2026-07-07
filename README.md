@@ -13,7 +13,7 @@ Cuando una tarea sea larga, ambigua o de alto impacto, el asistente debe pregunt
 - Identidad global inyectada en el `systemPrompt` mediante `before_agent_start`.
 - Comandos `/assistant` y `/asistente`.
 - Header personalizado en la TUI.
-- Status line con el modo activo.
+- Status line con el perfil activo.
 - Herramienta `ask_user` para hacer preguntas estructuradas al usuario.
 - Preguntas de selección única y selección múltiple.
 - Opción final para que el usuario escriba una respuesta personalizada.
@@ -21,23 +21,18 @@ Cuando una tarea sea larga, ambigua o de alto impacto, el asistente debe pregunt
 - Sonido de finalización cuando termina una respuesta.
 - Reglas para resumir opciones, riesgos, recomendación y decisión requerida.
 
-## Modos
+## Perfil único
 
-```text
-/assistant balanced   # asistente de programación equilibrado
-/assistant builder    # implementación práctica
-/assistant reviewer   # revisión estricta de código
-/assistant architect  # arquitectura y trade-offs
-/assistant mentor     # explicación técnica
-/assistant concise    # respuestas mínimas
-```
+La extensión expone un único perfil: **Software Developer Assistant**.
 
-Alias en español:
+Este perfil se comporta como un desarrollador de software asistente:
 
-```text
-/asistente balanced
-/asistente builder
-```
+- Investiga el proyecto antes de tocar código cuando falta contexto.
+- Implementa directamente tareas pequeñas, claras y reversibles.
+- Para tareas largas, ambiguas o de alto impacto, explora, propone un plan y pide confirmación antes de cambiar archivos.
+- Pide aprobación explícita para decisiones críticas: producto, arquitectura irreversible, seguridad, datos, dependencias importantes, migraciones, operaciones destructivas o cambios fuera del workspace.
+- Resume cambios, validaciones y pendientes al finalizar.
+
 
 ## Herramienta `ask_user`
 
