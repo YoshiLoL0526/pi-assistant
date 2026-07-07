@@ -80,7 +80,7 @@ export function updateWorkingIndicator(ctx: any, config: AssistantConfig): void 
 }
 
 export function helpText(command = "/assistant"): string {
-	return `Uso: ${command} [on|off|toggle|status|sound|ui|help]
+	return `Uso: ${command} [on|off|toggle|status|sound|ui|settings|help]
 
 Perfil activo:
 - ${ASSISTANT_LABEL}: asistente desarrollador de software con control humano para decisiones críticas`;

@@ -20,6 +20,7 @@ Cuando una tarea sea larga, ambigua o de alto impacto, el asistente debe pregunt
 - Opción final para que el usuario escriba una respuesta personalizada.
 - Sonido de atención cuando el asistente necesita input del usuario.
 - Sonido de finalización cuando termina una respuesta.
+- Panel interactivo `/assistant settings` para alternar asistente, sonidos y UI.
 - Reglas para resumir opciones, riesgos, recomendación y decisión requerida.
 
 ## Perfil único
@@ -60,6 +61,7 @@ Texto personalizado: Enter enviar texto · Esc volver
 /assistant toggle     # alterna activación
 /assistant sound      # alterna sonidos de atención/finalización
 /assistant ui         # alterna header/status personalizados
+/assistant settings   # abre panel interactivo de configuración
 /assistant help       # muestra ayuda
 ```
 

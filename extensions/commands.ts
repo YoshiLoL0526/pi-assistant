@@ -1,6 +1,7 @@
 import type { Theme } from "@earendil-works/pi-coding-agent";
 import type { AssistantConfig } from "./types.ts";
 import { ASSISTANT_LABEL } from "./profile.ts";
+import { openSettingsPanel } from "./settings-ui.ts";
 import { helpText, renderHeader, updateStatus, updateWorkingIndicator } from "./ui.ts";
 
 export function createCommandHandler(command: string, config: AssistantConfig) {
@@ -16,6 +17,10 @@ export function createCommandHandler(command: string, config: AssistantConfig) {
 		}
 		if (arg === "help" || arg === "ayuda") {
 			ctx.ui.notify(helpText(command), "info");
+			return;
+		}
+		if (arg === "settings" || arg === "config" || arg === "panel") {
+			await openSettingsPanel(ctx, command, config);
 			return;
 		}
 		if (arg === "on") config.enabled = true;
