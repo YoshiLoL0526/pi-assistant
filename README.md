@@ -12,17 +12,11 @@ Cuando una tarea sea larga, ambigua o de alto impacto, el asistente debe pregunt
 
 - Identidad global inyectada en el `systemPrompt` mediante `before_agent_start`.
 - Comandos `/assistant` y `/asistente`.
-- Header personalizado y animado en la TUI.
-- Status line con estados de actividad del asistente.
-- Widget compacto bajo el editor con perfil, modelo y accesos rápidos.
-- Spinner/working indicator personalizado con animación suave.
-- Tema `assistant-noir` con paleta oscura elegante para la TUI.
 - Herramienta `ask_user` para hacer preguntas estructuradas al usuario.
 - Preguntas de selección única y selección múltiple.
 - Opción final para que el usuario escriba una respuesta personalizada.
 - Sonido de atención cuando el asistente necesita input del usuario.
 - Sonido de finalización cuando termina una respuesta.
-- Panel interactivo `/assistant settings` para alternar asistente, sonidos y UI.
 - Configuración persistente en `~/.pi/agent/pi-assistant.json`.
 - Reglas para resumir opciones, riesgos, recomendación y decisión requerida.
 
@@ -37,7 +31,6 @@ Este perfil se comporta como un desarrollador de software asistente:
 - Para tareas largas, ambiguas o de alto impacto, explora, propone un plan y pide confirmación antes de cambiar archivos.
 - Pide aprobación explícita para decisiones críticas: producto, arquitectura irreversible, seguridad, datos, dependencias importantes, migraciones, operaciones destructivas o cambios fuera del workspace.
 - Resume cambios, validaciones y pendientes al finalizar.
-
 
 ## Herramienta `ask_user`
 
@@ -58,17 +51,13 @@ Texto personalizado: Enter enviar texto · Esc volver
 ## Comandos
 
 ```text
-/assistant status     # muestra estado actual
-/assistant on         # activa el asistente global
-/assistant off        # desactiva el asistente global
-/assistant toggle     # alterna activación
-/assistant sound      # alterna sonidos de atención/finalización
-/assistant ui         # alterna header/status/widget personalizados
-/assistant style      # rota estilo visual: animated, minimal, quiet
-/assistant style quiet|minimal|animated
+/assistant status      # muestra estado actual
+/assistant on          # activa el asistente global
+/assistant off         # desactiva el asistente global
+/assistant toggle      # alterna activación
+/assistant sound       # alterna sonidos de atención/finalización
 /assistant config-path # muestra dónde se guarda la configuración persistente
-/assistant settings   # abre panel interactivo de configuración
-/assistant help       # muestra ayuda
+/assistant help        # muestra ayuda
 ```
 
 ## Uso local durante desarrollo
@@ -78,8 +67,6 @@ Desde esta carpeta:
 ```bash
 pi --extension ./extensions/assistant.ts
 ```
-
-Para probar también el tema incluido, instala/carga el paquete local y selecciona `assistant-noir` desde `/settings`.
 
 ## Instalación global manual
 

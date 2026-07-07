@@ -1,12 +1,11 @@
 {
   "name": "pi-assistant",
   "version": "0.1.0",
-  "description": "Extensión de Pi para un asistente de programación reutilizable con UI y notificaciones.",
+  "description": "Extensión de Pi para un asistente de programación reutilizable con identidad global y preguntas estructuradas.",
   "keywords": ["pi-package", "pi-extension", "coding-assistant"],
   "license": "MIT",
   "type": "module",
   "pi": {
-    "extensions": ["./extensions/assistant.ts"],
-    "themes": ["./themes"]
+    "extensions": ["./extensions/assistant.ts"]
   }
 }
