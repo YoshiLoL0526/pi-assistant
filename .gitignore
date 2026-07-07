@@ -1,0 +1,9 @@
+node_modules/
+.pnpm-store/
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+.pi/sessions/
+*.log
