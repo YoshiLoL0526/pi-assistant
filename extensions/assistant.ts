@@ -12,7 +12,7 @@ export default function assistantExtension(pi: ExtensionAPI) {
 	pi.registerCommand("asistente", { description: "Alias en español de /assistant", handler: createCommandHandler("/asistente", config) });
 	pi.on("session_start", async (_event, ctx) => {
 		if (ctx.mode === "tui" && config.ui) {
-			ctx.ui.setHeader((tui, theme) => renderHeader(config, theme, tui));
+			ctx.ui.setHeader(config.uiStyle === "quiet" ? undefined : (tui, theme) => renderHeader(config, theme, tui));
 			updateStatus(ctx, config);
 			updateAssistantWidget(ctx, config);
 			updateWorkingIndicator(ctx, config);

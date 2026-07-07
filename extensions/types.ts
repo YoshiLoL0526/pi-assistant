@@ -1,9 +1,12 @@
 export type QuestionKind = "single" | "multiple";
 
+export type UiStyle = "animated" | "minimal" | "quiet";
+
 export type AssistantConfig = {
 	enabled: boolean;
 	sound: boolean;
 	ui: boolean;
+	uiStyle: UiStyle;
 };
 
 export type AskOption = {

@@ -62,7 +62,9 @@ Texto personalizado: Enter enviar texto · Esc volver
 /assistant off        # desactiva el asistente global
 /assistant toggle     # alterna activación
 /assistant sound      # alterna sonidos de atención/finalización
-/assistant ui         # alterna header/status personalizados
+/assistant ui         # alterna header/status/widget personalizados
+/assistant style      # rota estilo visual: animated, minimal, quiet
+/assistant style quiet|minimal|animated
 /assistant settings   # abre panel interactivo de configuración
 /assistant help       # muestra ayuda
 ```

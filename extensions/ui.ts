@@ -55,11 +55,12 @@ function sparkles(frame: number): string {
 }
 
 export function renderHeader(config: AssistantConfig, theme: Theme, tui?: { requestRender?: () => void }) {
-	let frame = 0;
+	let frame = config.uiStyle === "animated" ? 0 : 29;
 	let timer: ReturnType<typeof setInterval> | undefined;
 	const maxFrame = 28;
+	const animated = config.uiStyle === "animated";
 
-	if (tui?.requestRender) {
+	if (animated && tui?.requestRender) {
 		timer = setInterval(() => {
 			frame++;
 			if (frame > maxFrame) {
@@ -79,6 +80,7 @@ export function renderHeader(config: AssistantConfig, theme: Theme, tui?: { requ
 
 	return {
 		render(width: number): string[] {
+			if (config.uiStyle === "quiet") return [];
 			const lineWidth = Math.max(24, Math.min(width, 92));
 			const border = (text: string) => theme.fg(frame > maxFrame ? "borderMuted" : "borderAccent", text);
 			const accent = (text: string) => theme.fg("accent", text);
@@ -132,7 +134,7 @@ export function updateStatus(ctx: any, config: AssistantConfig, phase: "idle" | 
 
 export function updateAssistantWidget(ctx: any, config: AssistantConfig): void {
 	if (ctx.mode !== "tui") return;
-	if (!config.ui) {
+	if (!config.ui || config.uiStyle === "quiet") {
 		ctx.ui.setWidget?.("pi-assistant", undefined);
 		return;
 	}
@@ -159,21 +161,27 @@ export function updateWorkingIndicator(ctx: any, config: AssistantConfig): void 
 		ctx.ui.setWorkingIndicator?.();
 		return;
 	}
+	if (config.uiStyle === "quiet") {
+		ctx.ui.setWorkingIndicator?.();
+		return;
+	}
 	const theme = ctx.ui.theme;
 	ctx.ui.setWorkingIndicator?.({
-		frames: [
-			theme.fg("dim", "◇"),
-			theme.fg("muted", "◈"),
-			theme.fg("accent", "◆"),
-			theme.fg("borderAccent", "◈"),
-			theme.fg("muted", "◇"),
-		],
+		frames: config.uiStyle === "minimal"
+			? [theme.fg("accent", "◆")]
+			: [
+				theme.fg("dim", "◇"),
+				theme.fg("muted", "◈"),
+				theme.fg("accent", "◆"),
+				theme.fg("borderAccent", "◈"),
+				theme.fg("muted", "◇"),
+			],
 		intervalMs: 110,
 	});
 }
 
 export function helpText(command = "/assistant"): string {
-	return `Uso: ${command} [on|off|toggle|status|sound|ui|settings|help]
+	return `Uso: ${command} [on|off|toggle|status|sound|ui|style|settings|help]
 
 Perfil activo:
 - ${ASSISTANT_LABEL}: asistente desarrollador de software con control humano para decisiones críticas`;

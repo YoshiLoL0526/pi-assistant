@@ -4,4 +4,5 @@ export const config: AssistantConfig = {
 	enabled: true,
 	sound: true,
 	ui: true,
+	uiStyle: "animated",
 };

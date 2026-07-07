@@ -4,7 +4,7 @@ import type { AssistantConfig } from "./types.ts";
 import { ASSISTANT_LABEL } from "./profile.ts";
 import { helpText, renderHeader, updateAssistantWidget, updateStatus, updateWorkingIndicator } from "./ui.ts";
 
-type SettingId = "enabled" | "sound" | "ui" | "status" | "help" | "close";
+type SettingId = "enabled" | "sound" | "ui" | "style" | "status" | "help" | "close";
 
 interface SettingItem {
 	id: SettingId;
@@ -16,6 +16,7 @@ const ITEMS: SettingItem[] = [
 	{ id: "enabled", label: "Assistant global", description: "Inyecta el perfil de desarrollador en cada ejecución del agente" },
 	{ id: "sound", label: "Sonidos", description: "Avisos de atención y finalización" },
 	{ id: "ui", label: "UI personalizada", description: "Header, status line y spinner premium" },
+	{ id: "style", label: "Estilo visual", description: "Cambia entre animated, minimal y quiet" },
 	{ id: "status", label: "Mostrar estado", description: "Publica un resumen rápido en la UI" },
 	{ id: "help", label: "Ayuda", description: "Muestra comandos disponibles" },
 	{ id: "close", label: "Cerrar", description: "Vuelve al chat" },
@@ -25,12 +26,13 @@ function valueFor(item: SettingItem, config: AssistantConfig): string {
 	if (item.id === "enabled") return config.enabled ? "ON" : "OFF";
 	if (item.id === "sound") return config.sound ? "ON" : "OFF";
 	if (item.id === "ui") return config.ui ? "ON" : "OFF";
+	if (item.id === "style") return config.uiStyle;
 	return "";
 }
 
 function applyUi(ctx: any, config: AssistantConfig): void {
 	if (ctx.mode !== "tui") return;
-	if (config.ui) ctx.ui.setHeader((tui: any, theme: Theme) => renderHeader(config, theme, tui));
+	if (config.ui) ctx.ui.setHeader(config.uiStyle === "quiet" ? undefined : (tui: any, theme: Theme) => renderHeader(config, theme, tui));
 	else {
 		ctx.ui.setHeader(undefined);
 		ctx.ui.setStatus("pi-assistant", undefined);
@@ -61,7 +63,12 @@ export async function openSettingsPanel(ctx: any, command: string, config: Assis
 			if (item.id === "enabled") config.enabled = !config.enabled;
 			else if (item.id === "sound") config.sound = !config.sound;
 			else if (item.id === "ui") config.ui = !config.ui;
-			else if (item.id === "status") ctx.ui.notify(`Assistant ${config.enabled ? "activo" : "inactivo"}. Perfil: ${ASSISTANT_LABEL}. Sonido: ${config.sound ? "on" : "off"}. UI: ${config.ui ? "on" : "off"}.`, "info");
+			else if (item.id === "style") {
+				const styles = ["animated", "minimal", "quiet"] as const;
+				config.uiStyle = styles[(styles.indexOf(config.uiStyle) + 1) % styles.length];
+				config.ui = true;
+			}
+			else if (item.id === "status") ctx.ui.notify(`Assistant ${config.enabled ? "activo" : "inactivo"}. Perfil: ${ASSISTANT_LABEL}. Sonido: ${config.sound ? "on" : "off"}. UI: ${config.ui ? "on" : "off"}. Estilo: ${config.uiStyle}.`, "info");
 			else if (item.id === "help") ctx.ui.notify(helpText(command), "info");
 			else if (item.id === "close") {
 				done();
@@ -97,7 +104,7 @@ export async function openSettingsPanel(ctx: any, command: string, config: Assis
 				const isSelected = i === selected;
 				const prefix = isSelected ? accent("› ") : dim("  ");
 				const value = valueFor(item, config);
-				const valueText = value ? (value === "ON" ? ok(value) : off(value)) : "";
+				const valueText = value ? (value === "ON" || value === "animated" ? ok(value) : value === "quiet" ? off(value) : accent(value)) : "";
 				const label = isSelected ? accent(item.label) : theme.fg("text", item.label);
 				const spacer = value ? " ".repeat(Math.max(1, w - 6 - item.label.length - value.length)) : "";
 				lines.push(truncateToWidth(`${prefix}${label}${spacer}${valueText}`, width));
